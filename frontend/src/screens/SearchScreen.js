@@ -250,7 +250,7 @@ export default function SearchScreen() {
                 </Col>
               </Row>
               {products.length === 0 && (
-                <MessageBox   variant="danger">No Product Found</MessageBox>
+                <MessageBox variant="danger">No Product Found</MessageBox>
               )}
 
               <Row>

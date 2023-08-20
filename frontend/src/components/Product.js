@@ -45,16 +45,16 @@ function Product(props) {
       </Link>
       <Card.Body>
         <Link to={`/product/${product.slug}`}>
-          <Card.Title>{product.name}</Card.Title>
+          <Card.Title className="text-danger  text-decoration-underline" >{product.name}</Card.Title>
         </Link>
         <Rating rating={product.rating} numReviews={product.numReviews} />
         <Card.Text>${product.price}</Card.Text>
         {product.countInStock === 0 ? (
-          <Button variant="light" disabled>
+          <Button variant="danger" disabled>
             Out of stock
           </Button>
         ) : (
-          <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
+          <Button onClick={() => addToCartHandler(product)} variant="danger" >Add to cart</Button>
         )}
       </Card.Body>
     </Card>

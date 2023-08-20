@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors"; // Importa el módulo 'cors'
 import seedRouter from "./routes/seedRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
@@ -20,6 +21,8 @@ mongoose
   });
 
 const app = express();
+
+app.use(cors()); // Agrega el middleware 'cors'
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
