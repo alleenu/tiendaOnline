@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
-
+// Definición del esquema para la colección "orders" en la base de datos
 const orderSchema = new mongoose.Schema(
   {
+
+     // Detalles de los productos en la orden
     orderItems: [
       {
         slug: { type: String, required: true },
@@ -11,11 +13,13 @@ const orderSchema = new mongoose.Schema(
         price: { type: Number, required: true },
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Product',
+          ref: 'Product', // Referencia a la colección "products"
           required: true,
         },
       },
     ],
+
+     // Dirección de envío
     shippingAddress: {
       fullName: { type: String, required: true },
       address: { type: String, required: true },
@@ -31,6 +35,8 @@ const orderSchema = new mongoose.Schema(
         googleAddressId: String,
       },
     },
+
+     // Método de pago
     paymentMethod: { type: String, required: true },
     paymentResult: {
       id: String,
@@ -42,6 +48,7 @@ const orderSchema = new mongoose.Schema(
     shippingPrice: { type: Number, required: true },
     taxPrice: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
+    // Usuario asociado a la orden
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     isPaid: { type: Boolean, default: false },
     paidAt: { type: Date },
@@ -52,6 +59,6 @@ const orderSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
+// Crear el modelo "Order" basado en el esquema definido
 const Order = mongoose.model('Order', orderSchema);
 export default Order;

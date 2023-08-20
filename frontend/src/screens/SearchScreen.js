@@ -167,7 +167,7 @@ export default function SearchScreen() {
                   className={`all ${price === 'all' ? 'font-weight-bold text-danger' : ''}`}
                   to={getFilterUrl({ price: 'all' })}
                 >
-                  <u className="text-danger">Any</u>
+                  <u className={`${category === 'all' ? 'text-danger' : ''}`}>Any</u>
                 </Link>
               </li>
               {prices.map((p) => (
@@ -191,7 +191,8 @@ export default function SearchScreen() {
                     to={getFilterUrl({ rating: r.rating })}
                     className={`${r.rating}` === `${rating}` ? 'text-bold' : ''}
                   >
-                    <Rating caption={' & up'} rating={r.rating}></Rating>
+
+                    <Rating caption={<u className={`${r.rating === rating ? 'text-danger' : ''}`}> & up</u>} rating={r.rating}></Rating>
                   </Link>
                 </li>
               ))}
@@ -228,6 +229,7 @@ export default function SearchScreen() {
                       <Button
                         variant="danger"
                         onClick={() => navigate('/search')}
+
                       >
                         <i className="fas fa-times-circle"></i>
                       </Button>
@@ -268,12 +270,12 @@ export default function SearchScreen() {
                     className="mx-1"
                     to={{
                       pathname: '/search',
-                      seacrh: getFilterUrl({ page: x + 1 }, true),
+                      search: getFilterUrl({ page: x + 1 }, true),
                     }}
                   >
                     <Button
                       className={Number(page) === x + 1 ? 'text-bold' : ''}
-                      variant="ligh"
+                      variant="light"
                     >
                       {x + 1}
                     </Button>
@@ -287,3 +289,9 @@ export default function SearchScreen() {
     </div>
   );
 }
+
+
+
+
+
+
