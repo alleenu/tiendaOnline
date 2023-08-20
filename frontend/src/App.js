@@ -78,17 +78,17 @@ function App() {
       >
         <ToastContainer position="bottom-center" limit={1} />
         <header>
-          <Navbar bg="dark" variant="dark" expand="lg">
+          <Navbar bg="light" variant="danger" expand="lg">
             <Container>
               <Button
-                variant="dark"
+                variant="danger"
                 onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
               >
                 <i className="fas fa-bars"></i>
               </Button>
 
               <LinkContainer to="/">
-                <Navbar.Brand>NODU</Navbar.Brand>
+                <Navbar.Brand>ChicCloset</Navbar.Brand>
               </LinkContainer>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
@@ -154,7 +154,7 @@ function App() {
         >
           <Nav className="flex-column text-white w-100 p-2">
             <Nav.Item>
-              <strong>Categories</strong>
+              <strong  className="text-white" >Categories</strong>
             </Nav.Item>
             {categories.map((category) => (
               <Nav.Item key={category}>
@@ -162,7 +162,7 @@ function App() {
                   to={{ pathname: '/search', search: `category=${category}` }}
                   onClick={() => setSidebarIsOpen(false)}
                 >
-                  <Nav.Link>{category}</Nav.Link>
+                  <Nav.Link className="text-white">{category}</Nav.Link>
                 </LinkContainer>
               </Nav.Item>
             ))}
@@ -278,7 +278,7 @@ function App() {
           </Container>
         </main>
         <footer>
-          <div className="text-center">All rights reserved</div>
+          <div className="text-center">All rights reserved 2023 © Alleen </div>
         </footer>
       </div>
     </BrowserRouter>

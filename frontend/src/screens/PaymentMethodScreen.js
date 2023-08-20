@@ -13,21 +13,26 @@ export default function PaymentMethodScreen() {
     cart: { shippingAddress, paymentMethod },
   } = state;
 
+  // Estado local para manejar el método de pago seleccionado
   const [paymentMethodName, setPaymentMethod] = useState(
     paymentMethod || 'PayPal'
   );
 
+  // Redireccionar si no se ha proporcionado la dirección de envío
   useEffect(() => {
     if (!shippingAddress.address) {
       navigate('/shipping');
     }
   }, [shippingAddress, navigate]);
+
+  // Manejador de envío del formulario
   const submitHandler = (e) => {
     e.preventDefault();
     ctxDispatch({ type: 'SAVE_PAYMENT_METHOD', payload: paymentMethodName });
     localStorage.setItem('paymentMethod', paymentMethodName);
     navigate('/placeorder');
   };
+
   return (
     <div>
       <CheckoutSteps step1 step2 step3></CheckoutSteps>

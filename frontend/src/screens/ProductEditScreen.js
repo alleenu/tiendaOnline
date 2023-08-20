@@ -12,6 +12,8 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import Button from 'react-bootstrap/Button';
 
+
+// Reducer para manejar el estado de la pantalla
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -53,7 +55,7 @@ export default function ProductEditScreen() {
       loading: true,
       error: '',
     });
-
+ // Estado local para almacenar los datos del producto a editar
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
   const [price, setPrice] = useState('');
@@ -63,6 +65,9 @@ export default function ProductEditScreen() {
   const [countInStock, setCountInStock] = useState('');
   const [brand, setBrand] = useState('');
   const [description, setDescription] = useState('');
+  
+  
+  // Efecto para cargar los datos del producto a editar
 
   useEffect(() => {
     const fetchData = async () => {
@@ -206,7 +211,7 @@ export default function ProductEditScreen() {
 
           <Form.Group className="mb-3" controlId="additionalImage">
             <Form.Label>Additional Images</Form.Label>
-            {images.length === 0 && <MessageBox>No image</MessageBox>}
+            {images.length === 0 && <MessageBox variant="danger">No image</MessageBox>}
             <ListGroup variant="flush">
               {images.map((x) => (
                 <ListGroup.Item key={x}>
@@ -260,7 +265,7 @@ export default function ProductEditScreen() {
             />
           </Form.Group>
           <div className="mb-3">
-            <Button disabled={loadingUpdate} type="submit">
+            <Button disabled={loadingUpdate} type="submit" variant="danger"  >
               Update
             </Button>
             {loadingUpdate && <LoadingBox></LoadingBox>}

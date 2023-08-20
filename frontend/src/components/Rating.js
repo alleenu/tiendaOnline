@@ -1,5 +1,9 @@
+// Definir la componente Rating que acepta un objeto 'props'
 function Rating(props) {
+   // Extraer las propiedades de 'rating', 'numReviews' y 'caption' del objeto 'props'
     const { rating, numReviews, caption } = props;
+
+     // Renderizar la calificación utilizando íconos de estrellas
     return (
       <div className="rating">
         <span>

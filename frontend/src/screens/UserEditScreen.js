@@ -130,7 +130,7 @@ export default function UserEditScreen() {
           />
 
           <div className="mb-3">
-            <Button disabled={loadingUpdate} type="submit">
+            <Button disabled={loadingUpdate} type="submit" variant="danger">
               Update
             </Button>
             {loadingUpdate && <LoadingBox></LoadingBox>}

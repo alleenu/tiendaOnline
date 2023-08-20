@@ -1,13 +1,13 @@
-import { useEffect, useReducer, useState } from "react";
-import axios from "axios";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Product from "../components/Product";
-import { Helmet } from "react-helmet-async";
-import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox";
-// import data from '../data';
+import { useEffect, useReducer } from "react"; // Importar los hooks useEffect y useReducer de React
+import axios from "axios"; // Importar la biblioteca Axios para realizar solicitudes HTTP
+import Row from "react-bootstrap/Row"; // Importar el componente Row de React Bootstrap
+import Col from "react-bootstrap/Col"; // Importar el componente Col de React Bootstrap
+import Product from "../components/Product"; // Importar el componente Product
+import { Helmet } from "react-helmet-async"; // Importar el componente Helmet asincrónico para gestionar el título de la página
+import LoadingBox from "../components/LoadingBox"; // Importar el componente LoadingBox
+import MessageBox from "../components/MessageBox"; // Importar el componente MessageBox
 
+// Reductor para administrar el estado
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -22,42 +22,45 @@ const reducer = (state, action) => {
 };
 
 function HomeScreen() {
+  // Utilizar el hook useReducer para administrar el estado con el reductor definido
   const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     products: [],
     loading: true,
     error: "",
   });
-  // const [products, setProducts] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
-      dispatch({ type: "FETCH_REQUEST" });
+      dispatch({ type: "FETCH_REQUEST" }); // Iniciar la solicitud, establecer loading en true
       try {
+        // Realizar una solicitud para obtener los productos
         const result = await axios.get("/api/products");
-        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+        dispatch({ type: "FETCH_SUCCESS", payload: result.data }); // Actualizar el estado con los datos recibidos
       } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: err.message });
+        dispatch({ type: "FETCH_FAIL", payload: err.message }); // Manejar errores y actualizar el estado
       }
-
-      // setProducts(result.data);
     };
-    fetchData();
+    fetchData(); // Llamar a la función para obtener los datos
   }, []);
+
   return (
     <div>
+      {/* Configurar el título de la página */}
       <Helmet>
         <title>Tienda Online</title>
       </Helmet>
       <h1>Featured Products</h1>
       <div className="products">
         {loading ? (
-          <LoadingBox />
+          <LoadingBox /> // Mostrar LoadingBox si loading es true
         ) : error ? (
-          <MessageBox variant="danger">{error}</MessageBox>
+          <MessageBox variant="danger">{error}</MessageBox> // Mostrar MessageBox con el mensaje de error si hay un error
         ) : (
           <Row>
+            {/* Mapear los productos y mostrar cada uno */}
             {products.map((product) => (
               <Col key={product.slug} sm={6} md={4} lg={3} className="mb-3">
-                <Product product={product}></Product>
+                <Product product={product}></Product> {/* Mostrar el componente Product */}
               </Col>
             ))}
           </Row>
@@ -66,4 +69,5 @@ function HomeScreen() {
     </div>
   );
 }
-export default HomeScreen;
+
+export default HomeScreen; // Exportar el componente HomeScreen

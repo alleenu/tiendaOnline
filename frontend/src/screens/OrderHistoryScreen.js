@@ -6,8 +6,9 @@ import LoadingBox from '../components/LoadingBox';
 import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../Utils';
-import Button from 'react-bootstrap/esm/Button';
+import Button from 'react-bootstrap/Button'; // Importa Button de 'react-bootstrap'
 
+// Definición del reducer para manejar el estado
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -26,29 +27,36 @@ export default function OrderHistoryScreen() {
   const { userInfo } = state;
   const navigate = useNavigate();
 
+  // Uso de useReducer para manejar el estado de las órdenes y la carga
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
   });
+
   useEffect(() => {
     const fetchData = async () => {
+      // Iniciar la solicitud de historial de órdenes
       dispatch({ type: 'FETCH_REQUEST' });
       try {
         const { data } = await axios.get(
           `/api/orders/mine`,
-
           { headers: { Authorization: `Bearer ${userInfo.token}` } }
         );
+        // Solicitud exitosa, actualizar el estado con los datos de las órdenes
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (error) {
+        // Manejar el error de la solicitud
         dispatch({
           type: 'FETCH_FAIL',
           payload: getError(error),
         });
       }
     };
+
+    // Realizar la solicitud de historial de órdenes al montar el componente
     fetchData();
   }, [userInfo]);
+
   return (
     <div>
       <Helmet>
@@ -57,7 +65,7 @@ export default function OrderHistoryScreen() {
 
       <h1>Order History</h1>
       {loading ? (
-        <LoadingBox></LoadingBox>
+        <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
@@ -87,7 +95,7 @@ export default function OrderHistoryScreen() {
                 <td>
                   <Button
                     type="button"
-                    variant="light"
+                    variant="danger"
                     onClick={() => {
                       navigate(`/order/${order._id}`);
                     }}

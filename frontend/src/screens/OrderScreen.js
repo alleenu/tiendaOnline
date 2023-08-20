@@ -15,6 +15,8 @@ import { Store } from '../Store';
 import { getError } from '../Utils';
 import { toast } from 'react-toastify';
 
+
+// Reducer para gestionar el estado del componente
 function reducer(state, action) {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -56,6 +58,8 @@ export default function OrderScreen() {
   const { id: orderId } = params;
   const navigate = useNavigate();
 
+  // Estado inicial y reducer para manejar el estado del componente
+
   const [
     {
       loading,
@@ -76,7 +80,7 @@ export default function OrderScreen() {
   });
 
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
-
+// Función para crear una orden en PayPal
   function createOrder(data, actions) {
     return actions.order
       .create({
@@ -90,7 +94,7 @@ export default function OrderScreen() {
         return orderID;
       });
   }
-
+ // Función para manejar la aprobación del pago en PayPal
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
       try {
@@ -110,6 +114,8 @@ export default function OrderScreen() {
       }
     });
   }
+
+  // Función para manejar errores en PayPal
   function onError(err) {
     toast.error(getError(err));
   }
@@ -186,7 +192,7 @@ export default function OrderScreen() {
       dispatch({ type: 'DELIVER_FAIL' });
     }
   }
-
+ // Renderización del componente
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (

@@ -125,9 +125,8 @@ export default function SearchScreen() {
     const filterRating = filter.rating || rating;
     const filterPrice = filter.price || price;
     const sortOrder = filter.order || order;
-    return `${
-      skipPathname ? '' : '/search?'
-    }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
+    return `${skipPathname ? '' : '/search?'
+      }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
   };
   return (
     <div>
@@ -141,7 +140,7 @@ export default function SearchScreen() {
             <ul>
               <li>
                 <Link
-                  className={'all' === category ? 'text-bold' : ''}
+                  className={`all ${category === 'all' ? 'font-weight-bold text-danger' : ''}`}
                   to={getFilterUrl({ category: 'all' })}
                 >
                   Any
@@ -150,10 +149,11 @@ export default function SearchScreen() {
               {categories.map((c) => (
                 <li key={c}>
                   <Link
-                    className={c === category ? 'text-bold' : ''}
+                    className={`${c === category ? 'font-weight-bold text-danger' : ''}`}
                     to={getFilterUrl({ category: c })}
                   >
-                    {c}
+
+                    <u className="text-danger">{c}</u>
                   </Link>
                 </li>
               ))}
@@ -164,19 +164,19 @@ export default function SearchScreen() {
             <ul>
               <li>
                 <Link
-                  className={'all' === price ? 'text-bold' : ''}
+                  className={`all ${price === 'all' ? 'font-weight-bold text-danger' : ''}`}
                   to={getFilterUrl({ price: 'all' })}
                 >
-                  Any
+                  <u className="text-danger">Any</u>
                 </Link>
               </li>
               {prices.map((p) => (
                 <li key={p.value}>
                   <Link
                     to={getFilterUrl({ price: p.value })}
-                    className={p.value === price ? 'text-bold' : ''}
+                    className={`${p.value === price ? 'font-weight-bold text-danger' : ''}`}
                   >
-                    {p.name}
+                    <u className="text-danger">{p.name}</u>
                   </Link>
                 </li>
               ))}
@@ -222,11 +222,11 @@ export default function SearchScreen() {
                     {price !== 'all' && ' : Price ' + price}
                     {rating !== 'all' && ' : Rating ' + rating + ' & up'}
                     {query !== 'all' ||
-                    category !== 'all' ||
-                    rating !== 'all' ||
-                    price !== 'all' ? (
+                      category !== 'all' ||
+                      rating !== 'all' ||
+                      price !== 'all' ? (
                       <Button
-                        variant="light"
+                        variant="danger"
                         onClick={() => navigate('/search')}
                       >
                         <i className="fas fa-times-circle"></i>
@@ -250,7 +250,7 @@ export default function SearchScreen() {
                 </Col>
               </Row>
               {products.length === 0 && (
-                <MessageBox>No Product Found</MessageBox>
+                <MessageBox   variant="danger">No Product Found</MessageBox>
               )}
 
               <Row>
@@ -273,7 +273,7 @@ export default function SearchScreen() {
                   >
                     <Button
                       className={Number(page) === x + 1 ? 'text-bold' : ''}
-                      variant="light"
+                      variant="ligh"
                     >
                       {x + 1}
                     </Button>

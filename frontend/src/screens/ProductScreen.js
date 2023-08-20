@@ -154,7 +154,7 @@ function ProductScreen() {
                       <Button
                         className="thumbnail"
                         type="button"
-                        variant="light"
+                        variant="ligt"
                         onClick={() => setSelectedImage(x)}
                       >
                         <Card.Img variant="top" src={x} alt="product" />
@@ -196,7 +196,7 @@ function ProductScreen() {
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <div className="d-grid">
-                      <Button onClick={addToCartHandler} variant="primary">
+                      <Button onClick={addToCartHandler} variant="danger">
                         Add to Cart
                       </Button>
                     </div>
@@ -211,7 +211,7 @@ function ProductScreen() {
         <h2 ref={reviewsRef}>Reviews</h2>
         <div className="mb-3">
           {product.reviews.length === 0 && (
-            <MessageBox>There is no review</MessageBox>
+            <MessageBox  variant="danger" >There is no review</MessageBox>
           )}
         </div>
         <ListGroup>
@@ -257,14 +257,14 @@ function ProductScreen() {
               </FloatingLabel>
 
               <div className="mb-3">
-                <Button disabled={loadingCreateReview} type="submit">
+                <Button disabled={loadingCreateReview} type="submit"  variant="danger">
                   Submit
                 </Button>
                 {loadingCreateReview && <LoadingBox></LoadingBox>}
               </div>
             </form>
           ) : (
-            <MessageBox>
+            <MessageBox  variant="danger" >
               Please{' '}
               <Link to={`/signin?redirect=/product/${product.slug}`}>
                 Sign In

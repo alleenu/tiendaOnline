@@ -5,11 +5,16 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import { useNavigate } from 'react-router-dom';
 
+// Definir la componente SearchBox
 export default function SearchBox() {
+   // Utilizar el hook useNavigate de react-router-dom
   const navigate = useNavigate();
+   // Estado para almacenar el valor de búsqueda
   const [query, setQuery] = useState('');
+  // Función para manejar el envío del formulario de búsqueda
   const submitHandler = (e) => {
     e.preventDefault();
+    // Navegar a la página de búsqueda con el término de búsqueda en la URL
     navigate(query ? `/search/?query=${query}` : '/search');
   };
 
@@ -25,7 +30,7 @@ export default function SearchBox() {
           aria-label="Search Products"
           aria-describedby="button-search"
         ></FormControl>
-        <Button variant="outline-primary" type="submit" id="button-search">
+        <Button variant="danger" type="submit" id="button-search">
           <i className="fas fa-search"></i>
         </Button>
       </InputGroup>

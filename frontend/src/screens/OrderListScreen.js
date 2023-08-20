@@ -9,6 +9,7 @@ import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../Utils';
 
+// Definición del reducer para manejar el estado de la pantalla
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -37,10 +38,13 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 export default function OrderListScreen() {
   const navigate = useNavigate();
   const { state } = useContext(Store);
   const { userInfo } = state;
+
+  // Uso de useReducer para manejar el estado de las órdenes y la eliminación
   const [{ loading, error, orders, loadingDelete, successDelete }, dispatch] =
     useReducer(reducer, {
       loading: true,
@@ -62,6 +66,8 @@ export default function OrderListScreen() {
         });
       }
     };
+
+    // Si se eliminó una orden exitosamente, reinicia el estado
     if (successDelete) {
       dispatch({ type: 'DELETE_RESET' });
     } else {
@@ -69,6 +75,7 @@ export default function OrderListScreen() {
     }
   }, [userInfo, successDelete]);
 
+  // Función para manejar la eliminación de una orden
   const deleteHandler = async (order) => {
     if (window.confirm('Are you sure to delete?')) {
       try {
@@ -76,7 +83,7 @@ export default function OrderListScreen() {
         await axios.delete(`/api/orders/${order._id}`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         });
-        toast.success('order deleted successfully');
+        toast.success('Order deleted successfully');
         dispatch({ type: 'DELETE_SUCCESS' });
       } catch (err) {
         toast.error(getError(error));
@@ -93,9 +100,9 @@ export default function OrderListScreen() {
         <title>Orders</title>
       </Helmet>
       <h1>Orders</h1>
-      {loadingDelete && <LoadingBox></LoadingBox>}
+      {loadingDelete && <LoadingBox />}
       {loading ? (
-        <LoadingBox></LoadingBox>
+        <LoadingBox />
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
@@ -119,7 +126,6 @@ export default function OrderListScreen() {
                 <td>{order.createdAt.substring(0, 10)}</td>
                 <td>{order.totalPrice.toFixed(2)}</td>
                 <td>{order.isPaid ? order.paidAt.substring(0, 10) : 'No'}</td>
-
                 <td>
                   {order.isDelivered
                     ? order.deliveredAt.substring(0, 10)
@@ -128,7 +134,7 @@ export default function OrderListScreen() {
                 <td>
                   <Button
                     type="button"
-                    variant="light"
+                    variant="danger"
                     onClick={() => {
                       navigate(`/order/${order._id}`);
                     }}
@@ -138,7 +144,7 @@ export default function OrderListScreen() {
                   &nbsp;
                   <Button
                     type="button"
-                    variant="light"
+                    variant="danger"
                     onClick={() => deleteHandler(order)}
                   >
                     Delete
