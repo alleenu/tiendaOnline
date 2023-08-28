@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
-import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
+import { isAuth, isAdmin, generateToken, baseUrl } from '../utils.js';
+import nodemailer from 'nodemailer';
 
 const userRouter = express.Router();
 
@@ -69,25 +70,32 @@ userRouter.post(
       user.resetToken = token;
       await user.save();
 
-      //reset link
-      console.log(`${baseUrl()}/reset-password/${token}`);
-      mailgun()
-        .messages()
-        .send(
-          {
-            from: 'ChicCloset <me@mg.yourdomain.com>',
-            to: `${user.name} <${user.email}>`,
-            subject: `Reset Password`,
-            html: ` 
-             <p>Please Click the following link to reset your password:</p> 
-             <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
-             `,
-          },
-          (error, body) => {
-            console.log(error);
-            console.log(body);
-          }
-        );
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: 'user@gmail.com',
+          pass: '12345678',
+        },
+      });
+
+      const mailOptions = {
+        from: 'ChicCloset <admin@gmail.com>',
+        to: `${user.name} <${user.email}>`,
+        subject: 'Reset Password',
+        html: `
+          <p>Please Click the following link to reset your password:</p> 
+          <a href="${baseUrl()}/reset-password/${token}">Reset Password</a>
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Correo enviado: ' + info.response);
+        }
+      });
+
       res.send({ message: 'We sent reset password link to your email.' });
     } else {
       res.status(404).send({ message: 'User not found' });

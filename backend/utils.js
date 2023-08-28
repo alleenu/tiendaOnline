@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import mg from 'mailgun-js';
+import nodemailer from 'nodemailer';
 
 export const baseUrl = () =>
   process.env.BASE_URL
@@ -48,11 +48,34 @@ export const isAdmin = (req, res, next) => {
   }
 };
 
-export const mailgun = () =>
-  mg({
-    apiKey: process.env.MAILGUN_API_KEY,
-    domain: process.env.MAILGUN_DOMIAN,
+// Configuración del transporte de correo electrónico con nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'Gmail',
+  auth: {
+    user: 'user@example.com',
+    pass: '1234',
+  },
+});
+
+export const sendResetPasswordEmail = (user, token) => {
+  const mailOptions = {
+    from: 'ChicCloset <admin@example.com>',
+    to: `${user.name} <${user.email}>`,
+    subject: 'Reset Password',
+    html: `
+      <p>Please click the following link to reset your password:</p>
+      <a href="${baseUrl()}/reset-password/${token}">Reset Password</a>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
   });
+};
 
 export const payOrderEmailTemplate = (order) => {
   return `<h1>Thanks for shopping with us</h1>

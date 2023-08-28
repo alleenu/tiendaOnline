@@ -3,7 +3,8 @@ import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Product from '../models/productModel.js';
-import { isAuth, isAdmin, mailgun, payOrderEmailTemplate } from '../utils.js';
+import { isAuth, isAdmin, sendResetPasswordEmail, payOrderEmailTemplate } from '../utils.js';
+import nodemailer from 'nodemailer';
 
 const orderRouter = express.Router();
 
@@ -142,7 +143,7 @@ orderRouter.put(
         .messages()
         .send(
           {
-            from: 'ChicCloset <ChicCloset@mg.yourdomain.com>',
+            from: 'ChicCloset <ChicCloset@example>',
             to: `${order.user.name} <${order.user.email}>`,
             subject: `New order ${order._id}`,
             html: payOrderEmailTemplate(order),
@@ -168,14 +169,16 @@ orderRouter.delete(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId); // Obtener la instancia del modelo Order
     if (order) {
-      await order.remove();
+      await order.remove(); // Llamar a la función remove en la instancia del modelo Order
       res.send({ message: 'Order Deleted' });
     } else {
       res.status(404).send({ message: 'Order Not Found' });
     }
   })
 );
+
 
 export default orderRouter;
