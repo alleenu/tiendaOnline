@@ -6,6 +6,7 @@ import Product from '../models/productModel.js';
 import { isAuth, isAdmin, sendResetPasswordEmail, payOrderEmailTemplate } from '../utils.js';
 import nodemailer from 'nodemailer';
 
+// Obtener todas las órdenes (solo para administradores)
 const orderRouter = express.Router();
 
 orderRouter.get(
@@ -18,10 +19,12 @@ orderRouter.get(
   })
 );
 
+// Crear una nueva orden
 orderRouter.post(
   '/',
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    // Crear una nueva instancia de Order con los datos recibidos
     const newOrder = new Order({
       orderItems: req.body.orderItems.map((x) => ({ ...x, product: x._id })),
       shippingAddress: req.body.shippingAddress,
@@ -33,11 +36,13 @@ orderRouter.post(
       user: req.user._id,
     });
 
+    // Guardar la nueva orden en la base de datos
     const order = await newOrder.save();
     res.status(201).send({ message: 'New Order Created', order });
   })
 );
 
+// Obtener un resumen de estadísticas de órdenes (solo para administradores)
 orderRouter.get(
   '/summary',
   isAuth,
@@ -81,7 +86,7 @@ orderRouter.get(
     res.send({ users, orders, dailyOrders, productCategories });
   })
 );
-
+// Obtener las órdenes del usuario actual
 orderRouter.get(
   '/mine',
   isAuth,
@@ -90,7 +95,7 @@ orderRouter.get(
     res.send(orders);
   })
 );
-
+// Obtener detalles de una orden por su ID
 orderRouter.get(
   '/:id',
   isAuth,
@@ -103,7 +108,7 @@ orderRouter.get(
     }
   })
 );
-
+// Marcar una orden como entregada
 orderRouter.put(
   '/:id/deliver',
   isAuth,
@@ -119,7 +124,7 @@ orderRouter.put(
     }
   })
 );
-
+// Marcar una orden como pagada
 orderRouter.put(
   '/:id/pay',
   isAuth,
@@ -163,7 +168,7 @@ orderRouter.put(
     }
   })
 );
-
+// Eliminar una orden (solo para administradores)
 orderRouter.delete(
   '/:id',
   isAuth,

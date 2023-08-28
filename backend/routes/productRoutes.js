@@ -4,17 +4,18 @@ import Product from '../models/productModel.js';
 import { isAuth, isAdmin } from '../utils.js';
 
 const productRouter = express.Router();
-
+// Obtener todos los productos
 productRouter.get('/', async (req, res) => {
   const products = await Product.find();
   res.send(products);
 });
-
+// Crear un nuevo producto (solo para administradores)
 productRouter.post(
   '/',
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
+    // Crear una nueva instancia de Product con los datos recibidos
     const newProduct = new Product({
       name: 'sample name ' + Date.now(),
       slug: 'sample-name-' + Date.now(),
@@ -27,11 +28,12 @@ productRouter.post(
       numReviews: 0,
       description: 'sample description',
     });
+    // Guardar el nuevo producto en la base de datos
     const product = await newProduct.save();
     res.send({ message: 'Product Created', product });
   })
 );
-
+// Actualizar un producto por su ID (solo para administradores)
 productRouter.put(
   '/:id',
   isAuth,
@@ -56,7 +58,7 @@ productRouter.put(
     }
   })
 );
-
+// Eliminar un producto por su ID (solo para administradores)
 productRouter.delete(
   '/:id',
   isAuth,
@@ -71,7 +73,7 @@ productRouter.delete(
     }
   })
 );
-
+// Crear una reseña para un producto
 productRouter.post(
   '/:id/reviews',
   isAuth,
@@ -109,7 +111,7 @@ productRouter.post(
 );
 
 const PAGE_SIZE = 3;
-
+// Obtener productos para la página de administrador (solo para administradores)
 productRouter.get(
   '/admin',
   isAuth,
@@ -131,7 +133,7 @@ productRouter.get(
     });
   })
 );
-
+// Buscar productos con filtros y paginación
 productRouter.get(
   '/search',
   expressAsyncHandler(async (req, res) => {
